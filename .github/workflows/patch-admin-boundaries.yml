@@ -1,0 +1,90 @@
+name: Patch admin boundaries and info header
+
+on:
+  push:
+    paths:
+      - '.github/workflows/patch-admin-boundaries.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index.html
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+
+          css='''\n/* 資訊標題列：洲別放到國名右側 */\n.head>div:nth-child(2){display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto auto;width:100%;column-gap:8px;align-items:start}\n.head .name{grid-column:1;grid-row:1}\n.head .en{grid-column:1;grid-row:2}\n.head .tags{grid-column:2;grid-row:1/3;justify-self:end;align-self:center;margin-top:0;justify-content:flex-end}\n.head .dataState{grid-column:1/-1;grid-row:3}\n/* 行政區界線 */\n.county{fill:transparent;stroke:color-mix(in srgb,var(--text) 55%,var(--accent));stroke-width:.48;vector-effect:non-scaling-stroke;opacity:.9}\n.county-label{fill:var(--text);font-weight:650;stroke:var(--ocean);stroke-width:1.5px;paint-order:stroke;text-anchor:middle;pointer-events:none}\n'''
+          if '資訊標題列：洲別放到國名右側' not in s:
+              s=s.replace('</style>',css+'\n</style>',1)
+
+          s=s.replace('>縣市</button>','>行政區</button>')
+
+          old="let d3,topo,meta=[],countries=[],rankings={},projection,path,zoom,g,countryLayer,labelLayer,cityLayer,gridLayer,countyLayer,currentCountry=null,currentK=1,currentCities=[],taiwanCounties=null,populationFallback=new Map(),timezoneFallback=new Map();"
+          new="let d3,topo,meta=[],countries=[],rankings={},projection,path,zoom,g,countryLayer,labelLayer,cityLayer,gridLayer,countyLayer,currentCountry=null,currentK=1,currentCities=[],adminGeo=null,adminGeoCode=null,populationFallback=new Map(),timezoneFallback=new Map();"
+          s=s.replace(old,new)
+
+          s=s.replace("if(c.cca3==='TWN')loadTaiwanCounties();updateAllLabels()","loadAdminBoundaries(c);updateAllLabels()")
+
+          start=s.find('function updateCountyLabels()')
+          end=s.find('function updateCountryLabels()',start)
+          if start!=-1 and end!=-1:
+              repl="""function updateCountyLabels(){if(!countyLayer)return;const supported=['TWN','USA'].includes(currentCountry?.cca3);const labelK=currentCountry?.cca3==='USA'?7:10;countyLayer.selectAll('.county-label').attr('font-size',`${Math.max(.32,10/currentK)}px`).style('display',pref.counties&&supported&&currentK>=labelK?null:'none');countyLayer.selectAll('.county').style('display',pref.counties&&supported?null:'none')}\n"""
+              s=s[:start]+repl+s[end:]
+
+          old_func_start=s.find('async function loadTaiwanCounties()')
+          old_func_end=s.find('function applyLayers()',old_func_start)
+          if old_func_start!=-1 and old_func_end!=-1:
+              new_funcs=r'''async function loadAdminBoundaries(c){
+  if(!countyLayer||!c){return}
+  const code=c.cca3;
+  if(!['TWN','USA'].includes(code)){adminGeo=null;adminGeoCode=null;countyLayer.selectAll('*').remove();return}
+  if(adminGeo&&adminGeoCode===code){drawAdminBoundaries();return}
+  const url=code==='TWN'
+    ?'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/taiwan.geojson'
+    :'https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/united-states.geojson';
+  const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),5000);
+  try{
+    const r=await fetch(url,{signal:ctl.signal});if(!r.ok)throw 0;
+    adminGeo=await r.json();adminGeoCode=code;drawAdminBoundaries();
+  }catch{countyLayer.selectAll('*').remove();$('#status').textContent=`${name(c)}行政區圖資暫時無法載入。`}
+  finally{clearTimeout(timer)}
+}
+function drawAdminBoundaries(){
+  if(!countyLayer||!adminGeo?.features)return;
+  const p=d3.geoPath(projection);countyLayer.selectAll('*').remove();
+  countyLayer.selectAll('path.county').data(adminGeo.features).join('path').attr('class','county').attr('d',p);
+  countyLayer.selectAll('text.county-label').data(adminGeo.features).join('text').attr('class','county-label').attr('x',d=>p.centroid(d)[0]).attr('y',d=>p.centroid(d)[1]).text(d=>d.properties?.name_traditional_chinese||d.properties?.name||'');
+  updateCountyLabels();
+}
+'''
+              s=s[:old_func_start]+new_funcs+s[old_func_end:]
+
+          # reset 時清空行政區
+          s=s.replace("function reset(){currentCountry=null;countryLayer.selectAll('.country').attr('class','country');","function reset(){currentCountry=null;adminGeo=null;adminGeoCode=null;countyLayer?.selectAll('*').remove();countryLayer.selectAll('.country').attr('class','country');")
+
+          # 說明文字泛化
+          s=s.replace('台灣可放大到 30 倍；放大後會顯示縣市行政區界線與名稱。','行政區圖層：台灣顯示縣市界、美國顯示州界；放大後才顯示行政區名稱。')
+
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patched site
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo 'No changes needed'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Improve info header and add admin boundary overlays'
+          git push
