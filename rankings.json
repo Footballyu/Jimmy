@@ -1,26 +1,59 @@
 {
-  "TWN": {
-    "football": null,
-    "basketball": null,
-    "baseball": null,
-    "military": null
+  "_sources": {
+    "football": {
+      "name": "FIFA/Coca-Cola Men's World Ranking",
+      "date": "2026-07-20",
+      "url": "https://inside.fifa.com/fifa-rankings/world-ranking/men"
+    },
+    "basketball": {
+      "name": "FIBA World Ranking for Men",
+      "date": "2026-07-13",
+      "url": "https://www.fiba.basketball/en/ranking/men"
+    },
+    "baseball": {
+      "name": "WBSC Men's Baseball World Ranking",
+      "date": "2026-03-27",
+      "url": "https://www.wbsc.org/"
+    },
+    "military": {
+      "name": "Global Firepower 2026",
+      "date": "2026",
+      "url": "https://www.globalfirepower.com/countries-listing.php"
+    }
   },
-  "JPN": {
-    "football": null,
-    "basketball": null,
-    "baseball": null,
-    "military": null
-  },
-  "KOR": {
-    "football": null,
-    "basketball": null,
-    "baseball": null,
-    "military": null
-  },
-  "USA": {
-    "football": null,
-    "basketball": null,
-    "baseball": null,
-    "military": null
-  }
+  "TWN": {"football":174,"basketball":68,"baseball":2,"military":22},
+  "JPN": {"football":17,"basketball":22,"baseball":1,"military":7},
+  "KOR": {"football":32,"basketball":57,"baseball":4,"military":5},
+  "USA": {"football":16,"basketball":1,"baseball":3,"military":1},
+  "CHN": {"football":91,"basketball":30,"baseball":null,"military":3},
+  "AUS": {"football":28,"basketball":7,"baseball":9,"military":17},
+  "DEU": {"football":12,"basketball":2,"baseball":null,"military":12},
+  "FRA": {"football":3,"basketball":4,"baseball":null,"military":6},
+  "ESP": {"football":1,"basketball":6,"baseball":null,"military":18},
+  "ARG": {"football":2,"basketball":8,"baseball":null,"military":32},
+  "BRA": {"football":5,"basketball":9,"baseball":null,"military":11},
+  "CAN": {"football":30,"basketball":5,"baseball":null,"military":28},
+  "MEX": {"football":10,"basketball":28,"baseball":7,"military":36},
+  "VEN": {"football":47,"basketball":27,"baseball":5,"military":51},
+  "NLD": {"football":9,"basketball":52,"baseball":null,"military":34},
+  "ITA": {"football":15,"basketball":15,"baseball":null,"military":10},
+  "GBR": {"football":4,"basketball":46,"baseball":null,"military":8},
+  "POL": {"football":36,"basketball":19,"baseball":null,"military":21},
+  "TUR": {"football":27,"basketball":11,"baseball":null,"military":9},
+  "IRN": {"football":22,"basketball":26,"baseball":null,"military":16},
+  "PHL": {"football":135,"basketball":39,"baseball":null,"military":41},
+  "IDN": {"football":118,"basketball":94,"baseball":null,"military":13},
+  "THA": {"football":94,"basketball":97,"baseball":null,"military":24},
+  "VNM": {"football":99,"basketball":131,"baseball":null,"military":23},
+  "SGP": {"football":148,"basketball":133,"baseball":null,"military":29},
+  "IND": {"football":138,"basketball":75,"baseball":null,"military":4},
+  "ISR": {"football":76,"basketball":29,"baseball":null,"military":15},
+  "UKR": {"football":33,"basketball":38,"baseball":null,"military":20},
+  "SWE": {"football":37,"basketball":40,"baseball":null,"military":26},
+  "CHE": {"football":14,"basketball":61,"baseball":null,"military":46},
+  "PRT": {"football":7,"basketball":45,"baseball":null,"military":38},
+  "GRC": {"football":46,"basketball":13,"baseball":null,"military":30},
+  "NZL": {"football":86,"basketball":25,"baseball":null,"military":90},
+  "EGY": {"football":24,"basketball":43,"baseball":null,"military":19},
+  "ZAF": {"football":54,"basketball":119,"baseball":null,"military":40}
 }
