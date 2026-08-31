@@ -19,68 +19,27 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
-
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
-
-          css = """
-/* 地名防重疊：城市名稱預設隱藏，滑過或點選才顯示 */
-.city-label{display:none!important}
-.city:hover .city-label,.city.city-selected .city-label{display:block!important}
-.city{cursor:pointer}
-"""
+          css = "/* 地名防重疊 */\n.city-label{display:none!important}\n.city:hover .city-label,.city.city-selected .city-label{display:block!important}\n.city{cursor:pointer}\n"
           if '地名防重疊' not in s:
-              s = s.replace('</style>', css + '\n</style>', 1)
-
+              s = s.replace('</style>', css + '</style>', 1)
           old_vars = "let d3,topo,meta=[],countries=[],rankings={},projection,path,zoom,g,countryLayer,labelLayer,cityLayer,gridLayer,countyLayer,currentCountry=null,currentK=1,currentCities=[],taiwanCounties=null;"
           new_vars = "let d3,topo,meta=[],countries=[],rankings={},projection,path,zoom,g,countryLayer,labelLayer,cityLayer,gridLayer,countyLayer,currentCountry=null,currentK=1,currentCities=[],taiwanCounties=null,populationFallback=new Map(),timezoneFallback=new Map();"
           s = s.replace(old_vars, new_vars)
-
-          marker = "function prefLoad()"
-          fallback_code = r'''
-async function loadStableCountryFallbacks(){
-  try{
-    const [pr,tr]=await Promise.all([
-      fetch('https://cdn.jsdelivr.net/gh/samayo/country-json@master/src/country-by-population.json'),
-      fetch('https://cdn.jsdelivr.net/gh/karunais13/country-timezone-list@master/rawData.json')
-    ]);
-    if(pr.ok){
-      const rows=await pr.json();
-      rows.forEach(x=>{if(x?.country&&Number.isFinite(Number(x.population)))populationFallback.set(x.country,Number(x.population))});
-    }
-    if(tr.ok){
-      const rows=await tr.json();
-      rows.forEach(x=>{
-        const code=(x?.countryCode||'').toUpperCase();
-        const zone=x?.name;
-        if(!code||!zone)return;
-        if(!timezoneFallback.has(code))timezoneFallback.set(code,[]);
-        const a=timezoneFallback.get(code);
-        if(!a.includes(zone))a.push(zone);
-      });
-    }
-  }catch(e){console.warn('country fallback data unavailable',e)}
-}
-'''
+          fallback_code = "async function loadStableCountryFallbacks(){try{const [pr,tr]=await Promise.all([fetch('https://cdn.jsdelivr.net/gh/samayo/country-json@master/src/country-by-population.json'),fetch('https://cdn.jsdelivr.net/gh/karunais13/country-timezone-list@master/rawData.json')]);if(pr.ok){const rows=await pr.json();rows.forEach(x=>{if(x?.country&&Number.isFinite(Number(x.population)))populationFallback.set(x.country,Number(x.population))})}if(tr.ok){const rows=await tr.json();rows.forEach(x=>{const code=(x?.countryCode||'').toUpperCase(),zone=x?.name;if(!code||!zone)return;if(!timezoneFallback.has(code))timezoneFallback.set(code,[]);const a=timezoneFallback.get(code);if(!a.includes(zone))a.push(zone)})}}catch(e){console.warn('country fallback data unavailable',e)}}\n"
           if 'loadStableCountryFallbacks' not in s:
-              s = s.replace(marker, fallback_code + '\n' + marker, 1)
-
+              s = s.replace('function prefLoad()', fallback_code + 'function prefLoad()', 1)
           old_fix = "function applyFix(c){const f=FIX[c.cca3];return f?{...c,...f}:c}"
           new_fix = "function applyFix(c){const f=FIX[c.cca3];c=f?{...c,...f}:c;const p=populationFallback.get(c.name?.common);const tz=timezoneFallback.get(c.cca2);if(!c.population&&p)c={...c,population:p};if((!c.timezones||!c.timezones.length)&&tz?.length)c={...c,timezones:tz};return c}"
           s = s.replace(old_fix, new_fix)
-
           old_draw = "all.select('text').text(d=>d.name);updateCities()}"
           new_draw = "all.select('text').text(d=>d.name);all.on('click.cityPick',function(e){e.stopPropagation();const was=this.classList.contains('city-selected');cityLayer.selectAll('g.city').classed('city-selected',false);if(!was)d3.select(this).classed('city-selected',true)});updateCities()}"
           s = s.replace(old_draw, new_draw)
-
-          s = s.replace("loadCities();const initial=", "loadCities();await loadStableCountryFallbacks();const initial=")
-
-          # 資料來源文字改成較準確，不再聲稱 REST Countries 一定可用
+          s = s.replace('loadCities();const initial=', 'loadCities();await loadStableCountryFallbacks();const initial=')
           s = s.replace('world-countries + 備援資料', 'world-countries + 靜態備援資料')
-
           p.write_text(s, encoding='utf-8')
           PY
-
       - name: Commit patched site
         shell: bash
         run: |
