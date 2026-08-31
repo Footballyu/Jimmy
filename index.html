@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1118">
+  <title>寰圖｜全球地理快速查詢</title>
+  <style>
+    :root{--bg:#0b1118;--panel:#111922;--panel2:#16212c;--text:#f4f7fa;--muted:#8d9aa7;--border:#263541;--accent:#6fd5c1;--accent2:#315b57;--map:#28423f;--ocean:#0a1218;--danger:#ff7d7d;--gold:#d7b36a}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif} button,input{font:inherit} button{color:inherit} .app{min-height:100vh}.topbar{position:sticky;top:0;z-index:20;display:flex;gap:16px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border);background:rgba(11,17,24,.95);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:10px;min-width:max-content}.brand-mark{width:38px;height:38px;border:1px solid var(--border);border-radius:12px;display:grid;place-items:center;font-size:22px}.brand strong{font-size:20px}.brand small{display:block;color:var(--muted);font-size:11px}.tabs{display:flex;gap:6px;overflow:auto;scrollbar-width:none}.tab{border:1px solid transparent;background:transparent;padding:10px 12px;border-radius:12px;color:var(--muted);cursor:pointer;white-space:nowrap}.tab.active{background:var(--panel2);border-color:var(--border);color:var(--text)}.tab:disabled{opacity:.45;cursor:not-allowed}.searchWrap{margin-left:auto;position:relative;width:min(360px,40vw)}.search{width:100%;border:1px solid var(--border);background:#0d141b;color:var(--text);padding:12px 14px;border-radius:13px;outline:none}.search:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(111,213,193,.12)}.results{position:absolute;top:50px;left:0;right:0;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:6px;max-height:360px;overflow:auto;box-shadow:0 18px 45px rgba(0,0,0,.35)}.hidden{display:none!important}.result{width:100%;display:flex;align-items:center;gap:10px;text-align:left;border:0;background:transparent;padding:10px;border-radius:10px;cursor:pointer}.result:hover{background:var(--panel2)}.resultFlag{font-size:24px}.result small{display:block;color:var(--muted);margin-top:2px}.layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(340px,.72fr);min-height:calc(100vh - 68px)}.mapPanel{position:relative;min-width:0;border-right:1px solid var(--border);overflow:hidden}.mapHeader{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 8px}.crumb{font-weight:700}.status{color:var(--muted);font-size:13px;margin-top:7px}.actions{display:flex;gap:8px}.btn{border:1px solid var(--border);background:var(--panel);padding:9px 12px;border-radius:11px;cursor:pointer}.btn:hover{border-color:var(--accent)}.btn:disabled{opacity:.45;cursor:not-allowed}.mapStage{position:relative;margin:8px 18px 18px;border:1px solid var(--border);border-radius:18px;background:radial-gradient(circle at 55% 45%,#10212a 0,#0b151c 42%,var(--ocean) 75%);overflow:hidden;min-height:620px}.mapStage svg{display:block;width:100%;height:auto;min-height:620px}.country{fill:var(--map);stroke:#1d3033;stroke-width:.55;cursor:pointer;transition:fill .18s,opacity .18s,stroke .18s}.country:hover{fill:var(--accent2)}.country.selected{fill:var(--accent);stroke:#d8fff8;stroke-width:1.1}.country.dim{opacity:.25}.mapTools{position:absolute;left:14px;top:14px;display:grid;gap:8px}.tool{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:rgba(17,25,34,.9);cursor:pointer;font-size:20px}.legend{position:absolute;left:14px;bottom:14px;background:rgba(17,25,34,.92);border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--muted)}.legend strong{display:block;color:var(--text);margin-bottom:8px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);margin-right:6px}.info{padding:20px;overflow:auto}.countryHead{display:flex;align-items:flex-start;gap:13px}.flag{font-size:44px;line-height:1}.countryTitle{font-size:28px;font-weight:800;line-height:1.05}.en{color:var(--muted);font-size:13px;margin-top:6px}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.tag{border:1px solid var(--border);border-radius:999px;padding:5px 9px;font-size:12px;color:var(--accent)}.section{margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}.section:first-of-type{border-top:0;padding-top:0}.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.sectionTitle h3{margin:0;font-size:15px}.sectionTitle small{color:var(--muted)}.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.card{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px;min-width:0}.label{font-size:11px;color:var(--muted)}.value{font-weight:700;margin-top:5px;overflow-wrap:anywhere}.geoText{color:#b3c0ca;line-height:1.75;font-size:14px}.rankGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rank{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px}.rankTop{display:flex;justify-content:space-between;gap:6px;color:var(--muted);font-size:11px}.rankValue{font-size:20px;font-weight:800;margin:8px 0}.rankBar{height:5px;background:#0b1118;border-radius:99px;overflow:hidden}.rankFill{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .45s}.rank[data-kind="baseball"] .rankFill{background:var(--gold)}.rankSource{color:var(--muted);font-size:10px;margin-top:7px}.recents{display:flex;flex-wrap:wrap;gap:8px}.recent{border:1px solid var(--border);background:var(--panel);border-radius:999px;padding:7px 10px;cursor:pointer}.empty{color:var(--muted);font-size:13px}.footerNote{color:var(--muted);font-size:11px;line-height:1.5;margin-top:16px}.loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);pointer-events:none}.error{color:var(--danger)}
+    @media(max-width:960px){.topbar{flex-wrap:wrap}.searchWrap{order:3;width:100%;margin-left:0}.layout{grid-template-columns:1fr}.mapPanel{border-right:0;border-bottom:1px solid var(--border)}.mapStage{min-height:500px}.mapStage svg{min-height:500px}.info{overflow:visible}}
+    @media(max-width:620px){.topbar{padding:12px}.brand small{display:none}.tabs{width:calc(100% - 58px)}.mapHeader{padding:14px 12px 4px;flex-direction:column}.actions{width:100%}.actions .btn{flex:1}.mapStage{margin:8px;min-height:390px;border-radius:14px}.mapStage svg{min-height:390px}.legend{display:none}.info{padding:14px}.stats,.rankGrid{grid-template-columns:1fr 1fr}.countryTitle{font-size:24px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">🌐</div><div><strong>寰圖</strong><small>全球地理快速查詢</small></div></div>
+    <nav class="tabs" aria-label="資料模式">
+      <button class="tab active" type="button">地理</button>
+      <button class="tab" type="button" disabled title="下一版本加入">人均 GDP</button>
+      <button class="tab" type="button" disabled title="下一版本加入">人口</button>
+      <button class="tab" type="button" disabled title="下一版本加入">HDI</button>
+      <button class="tab" type="button" disabled title="下一版本加入">世界排名</button>
+    </nav>
+    <div class="searchWrap">
+      <input id="search" class="search" autocomplete="off" placeholder="搜尋國家，例如：台灣、日本、France…" aria-label="搜尋國家">
+      <div id="results" class="results hidden"></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="mapPanel">
+      <div class="mapHeader">
+        <div><div id="crumb" class="crumb">世界</div><div id="status" class="status">點選地圖上的國家，或使用上方搜尋。</div></div>
+        <div class="actions"><button id="worldBtn" class="btn" type="button" disabled>← 返回世界</button><button id="homeBtn" class="btn" type="button">重新置中</button></div>
+      </div>
+      <div class="mapStage">
+        <div id="loading" class="loading">正在載入全球國界資料…</div>
+        <svg id="map" viewBox="0 0 1100 650" role="img" aria-label="互動式世界地圖"></svg>
+        <div class="mapTools"><button id="plus" class="tool" type="button" aria-label="放大">＋</button><button id="minus" class="tool" type="button" aria-label="縮小">−</button></div>
+        <div class="legend"><strong>互動地圖</strong><div><span class="dot"></span>目前選取國家</div><div style="margin-top:6px">滑鼠滾輪縮放・拖曳移動</div></div>
+      </div>
+    </section>
+
+    <aside class="info">
+      <div class="countryHead"><div id="flag" class="flag">🌍</div><div><div id="countryName" class="countryTitle">全球</div><div id="englishName" class="en">World Explorer</div><div id="tags" class="tags"><span class="tag">選擇國家開始探索</span></div></div></div>
+
+      <section class="section">
+        <div class="sectionTitle"><h3>基本資訊</h3><small id="updated">公開資料</small></div>
+        <div class="stats">
+          <div class="card"><div class="label">首都</div><div id="capital" class="value">—</div></div>
+          <div class="card"><div class="label">人口</div><div id="population" class="value">—</div></div>
+          <div class="card"><div class="label">面積</div><div id="area" class="value">—</div></div>
+          <div class="card"><div class="label">貨幣</div><div id="currency" class="value">—</div></div>
+          <div class="card"><div class="label">語言</div><div id="language" class="value">—</div></div>
+          <div class="card"><div class="label">時區</div><div id="timezone" class="value">—</div></div>
+          <div class="card"><div class="label">國際電話</div><div id="calling" class="value">—</div></div>
+          <div class="card"><div class="label">國家代碼</div><div id="code" class="value">—</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionTitle"><h3>地理概況</h3></div>
+        <div id="geo" class="geoText">選擇國家後，這裡會顯示所屬洲別、次區域與基本地理資訊。</div>
+      </section>
+
+      <section class="section">
+        <div class="sectionTitle"><h3>世界排名</h3><small>可獨立更新資料</small></div>
+        <div class="rankGrid">
+          <div class="rank" data-kind="football"><div class="rankTop"><span>⚽ 足球</span><span>FIFA</span></div><div id="footballRank" class="rankValue">—</div><div class="rankBar"><div id="footballBar" class="rankFill"></div></div><div class="rankSource">FIFA Men's World Ranking</div></div>
+          <div class="rank" data-kind="basketball"><div class="rankTop"><span>🏀 籃球</span><span>FIBA</span></div><div id="basketballRank" class="rankValue">—</div><div class="rankBar"><div id="basketballBar" class="rankFill"></div></div><div class="rankSource">FIBA Men's World Ranking</div></div>
+          <div class="rank" data-kind="baseball"><div class="rankTop"><span>⚾ 棒球</span><span>WBSC</span></div><div id="baseballRank" class="rankValue">—</div><div class="rankBar"><div id="baseballBar" class="rankFill"></div></div><div class="rankSource">WBSC Men's Baseball Ranking</div></div>
+          <div class="rank" data-kind="military"><div class="rankTop"><span>🛡️ 軍力</span><span>GFP</span></div><div id="militaryRank" class="rankValue">—</div><div class="rankBar"><div id="militaryBar" class="rankFill"></div></div><div class="rankSource">Global Firepower Ranking</div></div>
+        </div>
+      </section>
+
+      <section class="section"><div class="sectionTitle"><h3>最近探索</h3><button id="clearRecent" class="btn" type="button">清除</button></div><div id="recents" class="recents"><span class="empty">尚無紀錄</span></div></section>
+      <div class="footerNote">排名資料與年度會隨官方發布更新；網站架構已將四種排名獨立成 rankings.json，後續可更新而不必修改主程式。</div>
+    </aside>
+  </main>
+</div>
+
+<script type="module">
+  const $=s=>document.querySelector(s);
+  let d3,topo,countries=[],countryMeta=[],rankings={},g,path,zoom,selectedFeature=null;
+  const featureById=new Map();
+  const metaByNumeric=new Map();
+  const STORAGE='atlas_recent_v1';
+  const zh={TWN:'台灣',JPN:'日本',KOR:'韓國',CHN:'中國',MNG:'蒙古',USA:'美國',CAN:'加拿大',MEX:'墨西哥',BRA:'巴西',ARG:'阿根廷',CHL:'智利',COL:'哥倫比亞',PER:'秘魯',GBR:'英國',IRL:'愛爾蘭',FRA:'法國',DEU:'德國',ITA:'義大利',ESP:'西班牙',PRT:'葡萄牙',CHE:'瑞士',AUT:'奧地利',NLD:'荷蘭',BEL:'比利時',DNK:'丹麥',NOR:'挪威',SWE:'瑞典',FIN:'芬蘭',ISL:'冰島',POL:'波蘭',CZE:'捷克',SVK:'斯洛伐克',HUN:'匈牙利',GRC:'希臘',TUR:'土耳其',UKR:'烏克蘭',RUS:'俄羅斯',IND:'印度',PAK:'巴基斯坦',BGD:'孟加拉',IDN:'印尼',THA:'泰國',VNM:'越南',PHL:'菲律賓',MYS:'馬來西亞',SGP:'新加坡',KHM:'柬埔寨',LAO:'寮國',MMR:'緬甸',AUS:'澳洲',NZL:'紐西蘭',EGY:'埃及',ZAF:'南非',NGA:'奈及利亞',KEN:'肯亞',ETH:'衣索比亞',MAR:'摩洛哥',DZA:'阿爾及利亞',SAU:'沙烏地阿拉伯',ARE:'阿拉伯聯合大公國',ISR:'以色列',IRN:'伊朗',IRQ:'伊拉克'};
+  const regionZh={Asia:'亞洲',Europe:'歐洲',Africa:'非洲',Americas:'美洲',Oceania:'大洋洲',Antarctic:'南極洲'};
+  const subZh={'Eastern Asia':'東亞','South-Eastern Asia':'東南亞','Southern Asia':'南亞','Western Asia':'西亞','Central Asia':'中亞','Northern Europe':'北歐','Western Europe':'西歐','Eastern Europe':'東歐','Southern Europe':'南歐','Northern Africa':'北非','Western Africa':'西非','Eastern Africa':'東非','Middle Africa':'中非','Southern Africa':'南非','North America':'北美洲','Central America':'中美洲','Caribbean':'加勒比海','South America':'南美洲','Australia and New Zealand':'澳洲與紐西蘭','Melanesia':'美拉尼西亞','Micronesia':'密克羅尼西亞','Polynesia':'玻里尼西亞'};
+  const nameOf=c=>zh[c?.cca3]||c?.translations?.zho?.common||c?.name?.common||'未知國家';
+  const flagOf=c=>c?.cca2?[...c.cca2].map(x=>String.fromCodePoint(127397+x.charCodeAt())).join(''):'🌍';
+  const fmtPop=n=>Number.isFinite(n)?new Intl.NumberFormat('zh-TW',{notation:n>=10000000?'compact':'standard',maximumFractionDigits:1}).format(n):'—';
+  const fmtArea=n=>Number.isFinite(n)?new Intl.NumberFormat('zh-TW').format(Math.round(n))+' km²':'—';
+  const translateRegion=s=>regionZh[s]||subZh[s]||s||'';
+  const id3=c=>String(c?.ccn3||'').padStart(3,'0');
+  const loadRecent=()=>{try{return JSON.parse(localStorage.getItem(STORAGE)||'[]')}catch{return[]}};
+  const saveRecent=a=>localStorage.setItem(STORAGE,JSON.stringify(a.slice(0,8)));
+  function addRecent(c){let a=loadRecent().filter(x=>x!==c.cca3);a.unshift(c.cca3);saveRecent(a);renderRecent()}
+  function renderRecent(){const box=$('#recents');const a=loadRecent();box.innerHTML='';if(!a.length){box.innerHTML='<span class="empty">尚無紀錄</span>';return}a.forEach(code=>{const c=countryMeta.find(x=>x.cca3===code);if(!c)return;const b=document.createElement('button');b.type='button';b.className='recent';b.textContent=`${flagOf(c)} ${nameOf(c)}`;b.addEventListener('click',()=>selectCountry(c));box.appendChild(b)})}
+  function rankValue(code,kind){const v=rankings?.[code]?.[kind];return Number.isFinite(v)?v:null}
+  function updateRank(code,kind,max=210){const v=rankValue(code,kind);const label=$(`#${kind}Rank`),bar=$(`#${kind}Bar`);label.textContent=v?`第 ${v} 名`:'—';bar.style.width=v?`${Math.max(5,100-(v-1)/(max-1)*94)}%`:'0%'}
+  function setInfo(c){$('#flag').textContent=flagOf(c);$('#countryName').textContent=nameOf(c);$('#englishName').textContent=c.name?.common||'';const tags=$('#tags');tags.innerHTML='';[translateRegion(c.region),translateRegion(c.subregion)].filter(Boolean).forEach(t=>{const s=document.createElement('span');s.className='tag';s.textContent=t;tags.appendChild(s)});$('#capital').textContent=(c.capital||[]).join('、')||'—';$('#population').textContent=fmtPop(c.population);$('#area').textContent=fmtArea(c.area);$('#currency').textContent=c.currencies?Object.values(c.currencies).map(x=>`${x.name}${x.symbol?' '+x.symbol:''}`).slice(0,2).join('、'):'—';$('#language').textContent=c.languages?Object.values(c.languages).slice(0,4).join('、'):'—';$('#timezone').textContent=(c.timezones||[]).slice(0,3).join('、')||'—';const root=c.idd?.root||'',suf=(c.idd?.suffixes||[])[0]||'';$('#calling').textContent=root?root+suf:'—';$('#code').textContent=[c.cca2,c.cca3].filter(Boolean).join(' / ');const r=translateRegion(c.region),sr=translateRegion(c.subregion);$('#crumb').textContent=['世界',r,sr,nameOf(c)].filter(Boolean).join('  ›  ');$('#status').textContent=`已聚焦 ${nameOf(c)}；可繼續點選其他國家。`;$('#geo').textContent=`${nameOf(c)}位於${r||'未知洲別'}${sr?`的${sr}`:''}。國土面積約 ${fmtArea(c.area)}，人口約 ${fmtPop(c.population)}。${c.landlocked?'屬於內陸國家。':'具有海岸線或島嶼領土。'}`;updateRank(c.cca3,'football',210);updateRank(c.cca3,'basketball',165);updateRank(c.cca3,'baseball',90);updateRank(c.cca3,'military',145);$('#worldBtn').disabled=false;addRecent(c)}
+  function zoomFeature(f){const b=path.bounds(f),dx=b[1][0]-b[0][0],dy=b[1][1]-b[0][1],x=(b[0][0]+b[1][0])/2,y=(b[0][1]+b[1][1])/2;const scale=Math.max(1,Math.min(9,.82/Math.max(dx/1100,dy/650)));const t=d3.zoomIdentity.translate(550,325).scale(scale).translate(-x,-y);d3.select('#map').transition().duration(matchMedia('(prefers-reduced-motion: reduce)').matches?0:950).call(zoom.transform,t)}
+  function selectCountry(c){const f=featureById.get(id3(c));if(!f)return;selectedFeature=f;document.querySelectorAll('.country').forEach(p=>p.classList.toggle('selected',p.__data__===f));zoomFeature(f);setInfo(c);$('#results').classList.add('hidden')}
+  function resetMap(){selectedFeature=null;document.querySelectorAll('.country').forEach(p=>p.classList.remove('selected'));d3.select('#map').transition().duration(500).call(zoom.transform,d3.zoomIdentity);$('#crumb').textContent='世界';$('#status').textContent='點選地圖上的國家，或使用上方搜尋。';$('#worldBtn').disabled=true}
+  function search(q){q=q.trim().toLowerCase();const box=$('#results');if(!q){box.classList.add('hidden');return}const hits=countryMeta.filter(c=>[nameOf(c),c.name?.common,c.name?.official,c.cca2,c.cca3,translateRegion(c.region),translateRegion(c.subregion)].filter(Boolean).join(' ').toLowerCase().includes(q)).slice(0,12);box.innerHTML='';hits.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='result';const fl=document.createElement('span');fl.className='resultFlag';fl.textContent=flagOf(c);const tx=document.createElement('span');tx.innerHTML=`<strong>${nameOf(c)}</strong><small>${c.name?.common||''} · ${translateRegion(c.region)}${c.subregion?' · '+translateRegion(c.subregion):''}</small>`;b.append(fl,tx);b.addEventListener('click',()=>{selectCountry(c);$('#search').value=nameOf(c)});box.appendChild(b)});box.classList.toggle('hidden',hits.length===0)}
+  $('#search').addEventListener('input',e=>search(e.target.value));$('#search').addEventListener('keydown',e=>{if(e.key==='Escape')$('#results').classList.add('hidden')});$('#worldBtn').addEventListener('click',resetMap);$('#homeBtn').addEventListener('click',resetMap);$('#clearRecent').addEventListener('click',()=>{localStorage.removeItem(STORAGE);renderRecent()});
+  try{
+    const [d3m,topom,{default:world},{default:wc},rankRes]=await Promise.all([
+      import('https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm'),
+      import('https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/+esm'),
+      import('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json/+esm'),
+      import('https://cdn.jsdelivr.net/npm/world-countries@5.1.0/+esm'),
+      fetch('./rankings.json').then(r=>r.ok?r.json():{}).catch(()=>({}))
+    ]);
+    d3=d3m;topo=topom;countryMeta=wc;rankings=rankRes||{};countries=topo.feature(world,world.objects.countries).features;countries.forEach(f=>featureById.set(String(f.id).padStart(3,'0'),f));countryMeta.forEach(c=>metaByNumeric.set(id3(c),c));const projection=d3.geoNaturalEarth1().fitExtent([[18,18],[1082,632]],{type:'FeatureCollection',features:countries});path=d3.geoPath(projection);g=d3.select('#map').append('g');g.selectAll('path').data(countries).join('path').attr('class','country').attr('d',path).each(function(d){this.__data__=d}).append('title').text(d=>{const c=metaByNumeric.get(String(d.id).padStart(3,'0'));return c?nameOf(c):'國家'});g.selectAll('path').on('click',(ev,f)=>{ev.stopPropagation();const c=metaByNumeric.get(String(f.id).padStart(3,'0'));if(c)selectCountry(c)});zoom=d3.zoom().scaleExtent([1,10]).on('zoom',ev=>g.attr('transform',ev.transform));d3.select('#map').call(zoom);$('#plus').addEventListener('click',()=>d3.select('#map').transition().call(zoom.scaleBy,1.5));$('#minus').addEventListener('click',()=>d3.select('#map').transition().call(zoom.scaleBy,1/1.5));$('#loading').remove();renderRecent();const last=loadRecent()[0];const initial=countryMeta.find(c=>c.cca3===last)||countryMeta.find(c=>c.cca3==='TWN');if(initial)setTimeout(()=>selectCountry(initial),250);
+  }catch(err){$('#loading').innerHTML='<span class="error">世界地圖資料載入失敗，請重新整理頁面。</span>';console.error(err)}
+</script>
+</body>
+</html>
